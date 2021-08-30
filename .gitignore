@@ -1,0 +1,12 @@
+/tokamak-coarse-grid-solve/
+/tokamak-jacobi-mi100/
+/tokamak-jacobi-v100/
+/tokamak-mi100/
+/tokamak-mi100-no-pre/
+/tokamak-no-pre/
+/tokamak-pa-mi100/
+/tokamak-pa-v100/
+/tokamak-v100/
+/venv/
+/.idea/
+/__pycache__/
