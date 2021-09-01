@@ -25,7 +25,7 @@ def level_6_speedup(db: Database):
     rt = df.groupby(["min_l", "solver"]).sum()
 
     # seems to be the most reasonable choice (rel low variance)
-    rt = rt.unstack("solver").average
+    rt = rt["max"].unstack("solver")
 
     speedup = rt.apply(lambda s: rt.petsc / s)
     speedup = speedup.drop(columns="petsc")
@@ -39,7 +39,7 @@ def level_6_total_runtime(db: Database):
     df = apply_filter(df)
 
     rt = df.set_index(["min_l", "solver"])
-    rt = rt.unstack("solver").average
+    rt = rt["max"].unstack("solver")
 
     return rt
 
@@ -55,6 +55,28 @@ def level_6_cgc_runtime(db: Database):
     rt = rt.unstack("solver").average
 
     return rt
+
+
+def level_6_only_cg_apply(db: Database):
+    df = db.get_df("cg solver apply")
+
+    df = apply_filter(df)
+
+    rt = df.groupby(["min_l", "solver"]).sum()
+    rt = rt["max"].unstack()
+
+    return rt
+
+
+def cg_apply_per_iteration(db: Database):
+    df = db.get_df("cg solver apply")
+
+    gko = df[(df.solver == "ginkgo")]
+
+    gko = gko.reset_index().rename(columns={"index": "iteration"})
+    gko = gko.set_index(["min_l", "iteration", "solver"])["max"].unstack(["min_l", "solver"])
+
+    return gko
 
 
 def ginkgo_setup_cost(db: Database):
@@ -158,7 +180,6 @@ def plot_level_6_total_runtime(df: pd.DataFrame, outname):
 
     df.plot(ax=ax)
 
-    ax.set_yscale("log")
     ax.set_ylabel("GMG Runtime [s]")
     ax.set_xlabel("Coarse Grid Level")
     ax.set_title("Tokamak Max. Level 6 [Total Runtime]")
