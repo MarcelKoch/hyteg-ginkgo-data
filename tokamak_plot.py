@@ -27,13 +27,19 @@ jac_mi100 = [f.path for f in os.scandir("tokamak-jacobi-mi100") if ".json" in f.
 
 jac_v100 = [f.path for f in os.scandir("tokamak-jacobi-v100") if ".json" in f.name]
 
+pa_mi100 = [f.path for f in os.scandir("tokamak-pa-mi100") if ".json" in f.name]
+
+pa_v100 = [f.path for f in os.scandir("tokamak-pa-v100") if ".json" in f.name]
+
 for files, suffix in [
         # (json_files, ""),
         # (json_mi100_files, "-mi100"),
         # (json_no_pre_files, "-no-pre"),
         # (json_mi100_no_pre_files, "-mi100-no-pre"),
-    #(jac_mi100, "-jac-mi100"),
-    (jac_v100, "-jac-v100")
+    (jac_mi100, "-jac-mi100"),
+    (jac_v100, "-jac-v100"),
+    (pa_v100, "-pa-v100"),
+    (pa_mi100, "-pa-mi100")
 ]:
     _db = Database(files)
 
