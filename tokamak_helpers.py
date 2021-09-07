@@ -71,12 +71,31 @@ def level_6_only_cg_apply(db: Database):
 def cg_apply_per_iteration(db: Database):
     df = db.get_df("cg solver apply")
 
-    gko = df[(df.solver == "ginkgo")]
+    df = df.reset_index().rename(columns={"index": "iteration"})
+    df = df.set_index(["min_l", "iteration", "solver"])["max"].unstack(["min_l", "solver"])
 
-    gko = gko.reset_index().rename(columns={"index": "iteration"})
-    gko = gko.set_index(["min_l", "iteration", "solver"])["max"].unstack(["min_l", "solver"])
+    return df
 
-    return gko
+
+def cg_apply(db: Database):
+    df = cg_apply_per_iteration(db)
+
+    return df.sum().unstack("solver")
+
+
+def plot_cg_apply(df: pd.DataFrame, outname: str):
+    fig, ax = plt.subplots()
+
+    df.plot(ax=ax)
+
+    ax.set_yscale("log")
+    ax.set_ylabel("Runtime of CG Apply [s]")
+    ax.set_xlabel("Coarse Grid Level")
+    ax.set_title("Tokamak Max. Level 6 [CG Apply]")
+    #ax.get_yaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
+    ax.legend()
+
+    fig.savefig(outname)
 
 
 def ginkgo_setup_cost(db: Database):

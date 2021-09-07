@@ -54,3 +54,7 @@ for files, suffix in [
     rt_detail = ginkgo_non_solve_cost(_db)
     plot_cgc_breakdown(rt_detail, "cost-breakdown" + suffix)
     print(rt_detail)
+
+    rt_cg = cg_apply(_db)
+    plot_cg_apply(rt_cg, "cg-apply" + suffix)
+    print(rt_cg)
