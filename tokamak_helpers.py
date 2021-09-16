@@ -137,6 +137,32 @@ def ginkgo_non_solve_cost(db: Database):
     return rt
 
 
+def total_runtime_breakdown(db: Database):
+    total = level_6_total_runtime(db)
+    cgc = level_6_cgc_runtime(db)
+    gmg = total - cgc
+    breakdown = pd.concat([gmg, cgc], keys=["gmg", "cgc"], axis=1)
+    breakdown = breakdown.stack("solver")
+    breakdown = breakdown.swaplevel(0, 1, axis=0)
+    breakdown = breakdown.sort_index()
+    return breakdown
+
+
+
+def plot_total_runtime_breakdown(df: pd.DataFrame, outname: str):
+    fig, ax = plt.subplots()
+
+    df.plot.barh(ax=ax, stacked=True)
+
+    ax.set_title("Tokamak Max. Level 6")
+    ax.set_xlabel("(Solver, Coarse Grid Level)")
+    ax.set_ylabel("Runtime [%]")
+    ax.set_title("Tokamak Max. Level 6 [Runtime Break-down]")
+    ax.legend()
+
+    fig.savefig(outname)
+
+
 def plot_cgc_breakdown(df: pd.DataFrame, outname):
     fig, ax = plt.subplots()
 

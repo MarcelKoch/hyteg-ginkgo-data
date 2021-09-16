@@ -58,3 +58,7 @@ for files, suffix in [
     rt_cg = cg_apply(_db)
     plot_cg_apply(rt_cg, "cg-apply" + suffix)
     print(rt_cg)
+
+    breakdown = total_runtime_breakdown(_db)
+    plot_total_runtime_breakdown(breakdown, "runtime-breakdown" + suffix)
+    print("Breakdown:\n", breakdown)
