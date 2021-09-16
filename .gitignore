@@ -11,5 +11,6 @@
 /.idea/
 /__pycache__/
 /petsc-pre/
-*.png
 /tmp*
+*.png
+*.html
