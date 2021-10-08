@@ -4,12 +4,25 @@ import re
 import json as js
 from functools import lru_cache
 
+
+def get_metadata(filename):
+    name_re = re.compile(r"(petsc|ginkgo)-(\d)-(\d)(-noAgg)?")
+    match = name_re.search(filename)
+    if match:
+        return{"solver": match.group(1),
+               "min_l": int(match.group(2)),
+               "max_l": int(match.group(3)),
+               "agg": not bool(match.group(4))}
+    else:
+        raise RuntimeError
+
+
 class Database(object):
-    def __init__(self, json_files):
+    def __init__(self, json_files, metadata=get_metadata):
         self.data = []
         for file in json_files:
             json_data = js.load(open(file))
-            self.data.append((json_data, get_metadata(file)))
+            self.data.append((json_data, metadata(file)))
 
     @lru_cache()
     def get_df(self, node):
@@ -28,7 +41,6 @@ def dfs(timingTree, visit=lambda _: True):
                 yield k, v
                 if visit(k):
                     yield from dfs(v, visit)
-
 
 
 def find(data, key,*, ignore_case=True, cutoff=True):
@@ -53,18 +65,6 @@ def to_df(data):
         k, v = next(iter(d.items()))
         series.append(pd.Series(v, name=k).drop(index="childs"))
     return pd.DataFrame(series).reset_index().rename(columns={"index": "node"})
-
-
-def get_metadata(filename):
-    name_re = re.compile(r"(petsc|ginkgo)-(\d)-(\d)(-noAgg)?")
-    match = name_re.search(filename)
-    if match:
-        return{"solver": match.group(1),
-               "min_l": int(match.group(2)),
-               "max_l": int(match.group(3)),
-               "agg": not bool(match.group(4))}
-    else:
-        raise RuntimeError
 
 
 def attach_metadata(df, data):
