@@ -10,7 +10,6 @@ from process import *
 from tokamak_helpers import *
 
 
-
 def get_metadata(file):
     name_re = re.compile(r"(\w+)-(\d)-(\d+)")
     match = name_re.search(file)
@@ -22,15 +21,12 @@ def get_metadata(file):
         raise RuntimeError
 
 
-
 files = [f.path for f in os.scandir("petsc-pre") if f.name.endswith(".json")]
-
-
-
 
 db = Database(files, get_metadata)
 
-
+solve = db.get_df("solve").drop(columns=["node"])
+solve = solve.groupby(["pre", "min_l", "nodes"]).median()
 
 cgc = db.get_df("coarse grid").drop(columns=["node"])
 cgc = cgc.groupby(["pre", "min_l", "nodes"]).median()
@@ -73,9 +69,10 @@ ax.set_xlabel("Processors")
 ax.set_title("Coarse Grid Solve Time [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
-fig.savefig("petsc-pre-tit")
+fig.savefig("petsc-pre-cgc-tit")
 
-rt = df.average.unstack("pre")
+rt = df.average
+rt = rt.unstack("pre")
 fig, ax = plt.subplots()
 rt.plot(ax=ax)
 ax.set_yscale("log")
@@ -83,6 +80,23 @@ ax.set_xscale("log")
 ax.set_ylabel("Time [s]")
 ax.set_xlabel("Processors")
 ax.set_title("Coarse Grid Solve Time [Weak Scaling]")
+ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
+ax.legend()
+fig.savefig("petsc-pre-cgc-rf")
+
+
+df = pd.concat([solve, it], axis=1).reset_index()
+df = df[df.pre != "hypre"]
+df = df.set_index(["pre", "count"])
+
+rt = df.average
+rt = rt.unstack("pre")
+fig, ax = plt.subplots()
+rt.plot(ax=ax)
+ax.set_xscale("log")
+ax.set_ylabel("Time [s]")
+ax.set_xlabel("Processors")
+ax.set_title("Solve Time [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
 fig.savefig("petsc-pre-rt")
