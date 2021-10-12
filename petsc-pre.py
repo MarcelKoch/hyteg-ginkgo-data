@@ -8,6 +8,12 @@ import pandas as pd
 
 from process import *
 from tokamak_helpers import *
+import matplotlib as mpl
+from cycler import cycler
+
+default_cycler = mpl.rcParams["axes.prop_cycle"]
+mpl.rcParams["axes.prop_cycle"] = (default_cycler + cycler(marker=["o", "v", "^", "<", ">", "s", "p", "*",
+                                                                   "D", "P", "X"][:len(default_cycler)]))
 
 
 def get_metadata(file):
