@@ -9,7 +9,7 @@ import pandas as pd
 from process import *
 from tokamak_helpers import *
 import matplotlib as mpl
-from cycler import cycler
+from matplotlib.rcsetup import cycler
 
 default_cycler = mpl.rcParams["axes.prop_cycle"]
 mpl.rcParams["axes.prop_cycle"] = (default_cycler + cycler(marker=["o", "v", "^", "<", ">", "s", "p", "*",
@@ -17,12 +17,13 @@ mpl.rcParams["axes.prop_cycle"] = (default_cycler + cycler(marker=["o", "v", "^"
 
 
 def get_metadata(file):
-    name_re = re.compile(r"(\w+)-(\d)-(\d+)")
+    name_re = re.compile(r"pre-(\w+-)?(\w+)-(\d)-(\d+)")
     match = name_re.search(file)
     if match:
-        return{"pre": match.group(1),
-               "min_l": int(match.group(2)),
-               "nodes": int(match.group(3)),}
+        return{"pre": match.group(2),
+               "min_l": int(match.group(3)),
+               "nodes": int(match.group(4)),
+               "agg": bool(match.group(1))}
     else:
         raise RuntimeError
 
@@ -32,10 +33,10 @@ files = [f.path for f in os.scandir("petsc-pre") if f.name.endswith(".json")]
 db = Database(files, get_metadata)
 
 solve = db.get_df("solve").drop(columns=["node"])
-solve = solve.groupby(["pre", "min_l", "nodes"]).median()
+solve = solve.groupby(["pre", "min_l", "nodes", "agg"]).median()
 
 cgc = db.get_df("coarse grid").drop(columns=["node"])
-cgc = cgc.groupby(["pre", "min_l", "nodes"]).median()
+cgc = cgc.groupby(["pre", "min_l", "nodes", "agg"]).median()
 
 
 def process_log(filename):
@@ -57,17 +58,21 @@ def process_log(filename):
 
 logs = [f.path for f in os.scandir("petsc-pre") if f.name.endswith(".log")]
 it = pd.DataFrame([process_log(f) for f in logs])
-it = it.set_index(["pre", "min_l", "nodes"])
+it = it.set_index(["pre", "min_l", "nodes", "agg"])
 
 df = pd.concat([cgc, it], axis=1).reset_index()
 df = df[df.pre != "hypre"]
-df = df.set_index(["pre", "count"])
+df = df.set_index(["pre", "count", "agg"])
 
 tit = df.average / df.it
-tit = tit.unstack("pre")
 
+default_cycler = mpl.rcParams["axes.prop_cycle"]
+dashed_cylcer = (default_cycler + cycler(linestyle=["--"] * len(default_cycler)))
 fig, ax = plt.subplots()
-tit.plot(ax=ax)
+for agg in [False, True]:
+    tit_agg = tit.unstack("agg")[agg].unstack("pre")
+    ax.set_prop_cycle(default_cycler if not agg else dashed_cylcer)
+    tit_agg.plot(ax=ax)
 ax.set_yscale("log")
 ax.set_xscale("log")
 ax.set_ylabel("Time/It [s]")
@@ -78,9 +83,11 @@ ax.legend()
 fig.savefig("petsc-pre-cgc-tit")
 
 rt = df.average
-rt = rt.unstack("pre")
 fig, ax = plt.subplots()
-rt.plot(ax=ax)
+for agg in [False, True]:
+    rt_agg = rt.unstack("agg")[agg].unstack("pre")
+    ax.set_prop_cycle(default_cycler if not agg else dashed_cylcer)
+    rt_agg.plot(ax=ax)
 ax.set_yscale("log")
 ax.set_xscale("log")
 ax.set_ylabel("Time [s]")
@@ -93,12 +100,14 @@ fig.savefig("petsc-pre-cgc-rf")
 
 df = pd.concat([solve, it], axis=1).reset_index()
 df = df[df.pre != "hypre"]
-df = df.set_index(["pre", "count"])
+df = df.set_index(["pre", "count", "agg"])
 
 rt = df.average
-rt = rt.unstack("pre")
 fig, ax = plt.subplots()
-rt.plot(ax=ax)
+for agg in [False, True]:
+    rt_agg = rt.unstack("agg")[agg].unstack("pre")
+    ax.set_prop_cycle(default_cycler if not agg else dashed_cylcer)
+    rt_agg.plot(ax=ax)
 ax.set_xscale("log")
 ax.set_ylabel("Time [s]")
 ax.set_xlabel("Processors")
