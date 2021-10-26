@@ -28,7 +28,7 @@ def get_metadata(file):
         raise RuntimeError
 
 
-files = [f.path for f in os.scandir("petsc-pre") if f.name.endswith(".json")]
+files = [f.path for f in os.scandir("petsc-pre-l0") if f.name.endswith(".json")]
 
 db = Database(files, get_metadata)
 
@@ -56,7 +56,7 @@ def process_log(filename):
     return {**get_metadata(filename), "min_dofs": min_dofs, "max_dofs":max_dofs, "gmg_it": len(iters), "it": sum(iters)}
 
 
-logs = [f.path for f in os.scandir("petsc-pre") if f.name.endswith(".log")]
+logs = [f.path for f in os.scandir("petsc-pre-l0") if f.name.endswith(".log")]
 it = pd.DataFrame([process_log(f) for f in logs])
 it = it.set_index(["pre", "min_l", "nodes", "agg"])
 
@@ -64,7 +64,11 @@ df = pd.concat([cgc, it], axis=1).reset_index()
 df = df[df.pre != "hypre"]
 df = df.set_index(["pre", "count", "agg"])
 
+print(df)
+
 tit = df.average / df.it
+
+print(tit)
 
 default_cycler = mpl.rcParams["axes.prop_cycle"]
 dashed_cylcer = (default_cycler + cycler(linestyle=["--"] * len(default_cycler)))
@@ -80,7 +84,7 @@ ax.set_xlabel("Processors")
 ax.set_title("Coarse Grid Solve Time [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
-fig.savefig("petsc-pre-cgc-tit")
+fig.savefig("petsc-pre-cgc-tit-l0")
 
 rt = df.average
 fig, ax = plt.subplots()
@@ -95,7 +99,7 @@ ax.set_xlabel("Processors")
 ax.set_title("Coarse Grid Solve Time [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
-fig.savefig("petsc-pre-cgc-rf")
+fig.savefig("petsc-pre-cgc-rf-l0")
 
 
 df = pd.concat([solve, it], axis=1).reset_index()
@@ -114,6 +118,6 @@ ax.set_xlabel("Processors")
 ax.set_title("Solve Time [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
-fig.savefig("petsc-pre-rt")
+fig.savefig("petsc-pre-rt-l0")
 
 
