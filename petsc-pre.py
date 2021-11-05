@@ -74,7 +74,7 @@ print(tit)
 
 default_cycler = mpl.rcParams["axes.prop_cycle"]
 dashed_cylcer = (default_cycler + cycler(linestyle=["--"] * len(default_cycler)))
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(dpi=300)
 for agg in [True, False]:
     tit_agg = tit.unstack("agg")[agg].unstack("pre")
     ax.set_prop_cycle(default_cycler if not agg else dashed_cylcer)
@@ -89,7 +89,7 @@ ax.legend()
 fig.savefig("pre-cgc-tit-l0")
 
 rt = cgc.average
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(dpi=300)
 for agg in [True, False]:
     rt_agg = rt.unstack("agg")[agg].unstack("pre")
     ax.set_prop_cycle(default_cycler if not agg else dashed_cylcer)
@@ -103,8 +103,8 @@ ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
 fig.savefig("pre-cgc-rf-l0")
 
-rt = solve.average / solve.gmg_it
-fig, ax = plt.subplots()
+rt = solve.average  # / solve.gmg_it
+fig, ax = plt.subplots(dpi=300)
 for agg in [True, False]:
     rt_agg = rt.unstack("agg")[agg].unstack("pre")
     ax.set_prop_cycle(default_cycler if not agg else dashed_cylcer)
