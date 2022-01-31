@@ -25,10 +25,10 @@ class Database(object):
             self.data.append((json_data, metadata(file)))
 
     @lru_cache()
-    def get_df(self, node):
+    def get_df(self, node, **kwargs):
         df_list = []
         for jd, md in self.data:
-            vals = find(jd, node)
+            vals = find(jd, node, **kwargs)
             new_df = to_df(vals)
             df_list.append(attach_metadata(new_df, md))
         return pd.concat(df_list, sort=False)
