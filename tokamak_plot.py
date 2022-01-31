@@ -44,21 +44,21 @@ for files, suffix in [
     _db = Database(files)
 
     speedup = level_6_speedup(_db)
-    plot_level_6_speedup(speedup, "speedup" + suffix)
+    plot_level_6_speedup(speedup, "img/speedup" + suffix)
     print(speedup)
 
     runtime = level_6_total_runtime(_db)
-    plot_level_6_total_runtime(runtime, "runtime" + suffix)
+    plot_level_6_total_runtime(runtime, "img/runtime" + suffix)
     print(runtime)
 
     rt_detail = ginkgo_non_solve_cost(_db)
-    plot_cgc_breakdown(rt_detail, "cost-breakdown" + suffix)
+    plot_cgc_breakdown(rt_detail, "img/cost-breakdown" + suffix)
     print(rt_detail)
 
     rt_cg = cg_apply(_db)
-    plot_cg_apply(rt_cg, "cg-apply" + suffix)
+    plot_cg_apply(rt_cg, "img/cg-apply" + suffix)
     print(rt_cg)
 
     breakdown = total_runtime_breakdown(_db)
-    plot_total_runtime_breakdown(breakdown, "runtime-breakdown" + suffix)
+    plot_total_runtime_breakdown(breakdown, "img/runtime-breakdown" + suffix)
     print("Breakdown:\n", breakdown)

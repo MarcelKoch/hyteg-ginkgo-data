@@ -86,7 +86,7 @@ ax.set_xlabel("Processors")
 ax.set_title("Coarse Grid Solve Time [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
-fig.savefig("pre-cgc-tit-l0")
+fig.savefig("img/pre-cgc-tit-l0")
 
 rt = cgc.average
 fig, ax = plt.subplots(dpi=300)
@@ -101,7 +101,7 @@ ax.set_xlabel("Processors")
 ax.set_title("Coarse Grid Solve Time [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
-fig.savefig("pre-cgc-rf-l0")
+fig.savefig("img/pre-cgc-rf-l0")
 
 rt = solve.average  # / solve.gmg_it
 fig, ax = plt.subplots(dpi=300)
@@ -115,6 +115,6 @@ ax.set_xlabel("Processors")
 ax.set_title("Solve Time Per V-Cycle [Weak Scaling]")
 ax.get_xaxis().set_major_formatter(ticker.StrMethodFormatter("{x:g}"))
 ax.legend()
-fig.savefig("pre-rt-l0")
+fig.savefig("img/pre-rt-l0")
 
 

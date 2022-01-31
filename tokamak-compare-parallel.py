@@ -62,7 +62,7 @@ total_rt = pd.concat([speedup(total_rt_v100).rename("v100"), speedup(total_rt_mi
 
 fig, ax = plt.subplots()
 total_rt.plot(ax=ax, logy=False, title="Speedup [Total Runtime]", xlabel="Coarse Grid Level", ylabel="Speedup against Seq.")
-fig.savefig("compare-total-runtime")
+fig.savefig("img/compare-total-runtime")
 
 
 # In[40]:
@@ -77,6 +77,6 @@ cgc_rt = pd.concat([speedup(cgc_rt_v100).rename("v100"), speedup(cgc_rt_mi100).r
 
 fig, ax = plt.subplots()
 cgc_rt.plot(ax=ax, logy=False, title="Speedup [Coarse Grid Runtime]", xlabel="Coarse Grid Level", ylabel="Speedup against Seq.")
-fig.savefig("compare-cgc-runtime")
+fig.savefig("img/compare-cgc-runtime")
 
 
