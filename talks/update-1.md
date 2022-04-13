@@ -22,15 +22,15 @@ author: Marcel Koch
 
 ---
 
-![](speedup.png)
+![](../img/speedup.png)
 
 ---
 
-![](runtime.png)
+![](../img/runtime.png)
 
 ---
 
-![](cost-breakdown.png)
+![](../img/cost-breakdown.png)
 
 # Fair Results
 
@@ -40,11 +40,11 @@ author: Marcel Koch
 
 ---
 
-![](speedup-no-pre.png)
+![](../img/speedup-no-pre.png)
 
 ---
 
-![](runtime-no-pre.png)
+![](../img/runtime-no-pre.png)
 
 # Todo
 

@@ -15,11 +15,11 @@ author: Marcel Koch
 
 ---
 
-![](compare-cgc-runtime.png)
+![](../img/compare-cgc-runtime.png)
 
 ---
 
-![](compare-total-runtime.png)
+![](../img/compare-total-runtime.png)
 
 # WIP
 
@@ -38,27 +38,27 @@ author: Marcel Koch
 
 ---
 
-![V100](runtime-jac-v100.png)
+![V100](../img/runtime-jac-v100.png)
 
 ---
 
-![MI100](runtime-jac-mi100.png)
+![MI100](../img/runtime-jac-mi100.png)
 
 ---
 
-![V100](speedup-jac-v100.png)
+![V100](../img/speedup-jac-v100.png)
 
 ---
 
-![MI100](speedup-jac-mi100.png)
+![MI100](../img/speedup-jac-mi100.png)
 
 --- 
 
-![V100](cg-apply-jac-v100.png)
+![V100](../img/cg-apply-jac-v100.png)
 
 ---
 
-![MI100](cg-apply-jac-mi100.png)
+![MI100](../img/cg-apply-jac-mi100.png)
 
 # Tokamak App
 

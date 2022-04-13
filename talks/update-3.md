@@ -30,15 +30,15 @@ author: Marcel Koch
 
 ---
 
-![](petsc-pre-cgc-rf.png)
+![](../img/petsc-pre-cgc-rf.png)
 
 ---
 
-![](petsc-pre-cgc-tit.png)
+![](../img/petsc-pre-cgc-tit.png)
 
 ---
 
-![](petsc-pre-rt.png)
+![](../img/petsc-pre-rt.png)
 
 # Todo
 
